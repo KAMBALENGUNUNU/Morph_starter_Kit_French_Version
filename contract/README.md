@@ -1,66 +1,86 @@
 ## Foundry
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+**Foundry est une boîte à outils ultra-rapide, portable et modulaire pour le développement d'applications Ethereum, écrite en Rust.**
 
-Foundry consists of:
+Foundry se compose de :
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+-   **Forge**: Framework de test pour Ethereum (comme Truffle, Hardhat et DappTools).
+-   **Cast**: Couteau suisse pour interagir avec les contrats intelligents EVM, envoyer des transactions et récupérer des données de la chaîne.
+-   **Anvil**: Nœud Ethereum local, similaire à Ganache, Hardhat Network.
+-   **Chisel**: Un REPL Solidity rapide, utilitaire et verbeux.
 
 ## Documentation
 
 https://book.getfoundry.sh/
 
-## Usage
+## Utilisation
 
-### Build
+### Construction
 
 ```shell
 $ forge build
 ```
+# Compile les contrats intelligents avec Forge
 
 ### Test
 
 ```shell
 $ forge test
 ```
+# Lance les tests pour les contrats intelligents
 
-### Format
+
+### Formatage
 
 ```shell
 $ forge fmt
 ```
+# Formate le code Solidity selon les conventions
 
-### Gas Snapshots
+
+### Captures de gaz
 
 ```shell
 $ forge snapshot
 ```
+# Prend des snapshots des coûts en gaz des transactions
+
+
 
 ### Anvil
 
 ```shell
 $ anvil
 ```
+# Lance un nœud Ethereum local pour les tests
 
-### Deploy
+
+
+### Déploiement
 
 ```shell
 $ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
 ```
+# Déploie un contrat intelligent en utilisant un script Forge
+
+
 
 ### Cast
 
 ```shell
 $ cast <subcommand>
 ```
+# Utilise Cast pour interagir avec les contrats et la blockchain
 
-### Help
+
+
+### Aide
 
 ```shell
 $ forge --help
 $ anvil --help
 $ cast --help
 ```
+# Affiche l'aide pour chaque outil
+
+
