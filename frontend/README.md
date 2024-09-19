@@ -1,24 +1,24 @@
-# Next.js TypeScript Starter Kit onchain
+# Next.js TypeScript Starter Kit Onchain
 
-![A screenshot of the starter kit](./screenshot.png)
+![Une capture d'écran du kit de démarrage](./screenshot.png)
 
-This starter kit is designed to provide a comprehensive template for building frontends for your dApps using Next.js, TypeScript, Shadcn, and Tailwind CSS. It includes setup for WAGMI React hooks and Viem for seamless onchain transactions. 
+Ce kit de démarrage est conçu pour fournir un modèle complet pour construire des interfaces frontend pour vos dApps en utilisant Next.js, TypeScript, Shadcn, et Tailwind CSS. Il inclut une configuration pour les hooks WAGMI React et Viem pour des transactions onchain fluides.
 
-By default, this template connects to the Morph Sepolia testnet.
+Par défaut, ce modèle se connecte au réseau de test Morph Sepolia.
 
-## 🧑‍🚀 Initial Setup
+## 🧑‍🚀 Configuration Initiale
 
-### Environment Configuration
+### Configuration de l'environnement
 
-Before you start, you need to set up your environment variables. Create a `.env.local` file in the root directory by running:
+Avant de commencer, vous devez configurer vos variables d'environnement. Créez un fichier `.env.local` dans le répertoire racine en exécutant :
 
 ```bash
 cp .env.example .env.local
 ```
 
-In the file, update the `NEXT_PUBLIC_PROJECT_ID` variable with your WalletConnect project ID. You can obtain one by registering your project at [WalletConnect Cloud](https://cloud.walletconnect.com/).
+Dans ce fichier, mettez à jour la variable `NEXT_PUBLIC_PROJECT_ID`avec votre identifiant de projet WalletConnect. Vous pouvez en obtenir un en enregistrant votre projet sur [WalletConnect Cloud](https://cloud.walletconnect.com/).
 
-### Install Dependencies 
+### Installer les dépendances
 
 ```bash
 npm install
@@ -30,9 +30,9 @@ pnpm install
 bun install
 ```
 
-### Running the Development Server
+### Lancer le serveur de développement
 
-To run the development server, execute one of the following commands in your terminal:
+Pour exécuter le serveur de développement, lancez une des commandes suivantes dans votre terminal :
 
 ```bash
 npm run dev
@@ -44,21 +44,24 @@ pnpm dev
 bun dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to see your application in action. Begin by editing `app/page.tsx` to make changes and see them reflected in real time.
+Visitez  [http://localhost:3000](http://localhost:3000) pour voir votre application en action. Commencez par modifier `app/page.tsx` pour faire des changements et les voir se refléter en temps réel.
 
-## 🧞 Features
+## 🧞 Fonctionnalités
 
-- **TypeScript**: Utilize the strong typing of TypeScript to write more robust and error-free code.
-- **Tailwind CSS**: Style your application efficiently using utility-first CSS.
-- **WAGMI Hooks**: Manage blockchain wallet and network interactions with ease.
-- **Viem**: Handle on-chain interactions directly within your frontend application.
-- **Morph Sepolia Testnet**: Connect to the Morph testnet to develop and test your dApps.
+- **TypeScript**: Utilisez le typage fort de TypeScript pour écrire un code plus robuste et sans erreurs.
+- **Tailwind CSS**:  Stylisez votre application efficacement avec CSS orienté utilitaires.
+- **WAGMI Hooks**: Gérez les interactions avec les portefeuilles blockchain et les réseaux en toute simplicité.
+- **Viem**: Gérez les interactions on-chain directement dans votre application frontend.
+- **Morph Sepolia Testnet**: Connectez-vous au testnet Morph pour développer et tester vos dApps.
 
-## ✨ Learning Resources
 
-- **Morph L2**: Learn more about Morph and its capabilities by visiting [Morph Layer 2 Official Site](https://www.morphl2.io/).
-- **Morph Documentation**: For detailed information on how Morph works and how to integrate it into your applications, check out the [Morph Docs](https://docs.morphl2.io/docs/how-morph-works/intro/).
+## ✨ Ressources d'Apprentissage
 
-## 🚀 Deployment
+- **Morph L2**: En savoir plus sur Morph et ses capacités en visitant le [Morph Layer 2 Official Site](https://www.morphl2.io/).
 
-Deploy your application with ease using platforms like [Vercel](https://vercel.com/), which provides out-of-the-box support for Next.js applications, or [Juno](https://juno.build), which gives you full control over your dApp by enabling its deployment on Web3. Refer to platform-specific guides for details on deploying Next.js applications.
+- **Documentation Morph**:Pour des informations détaillées sur le fonctionnement de Morph et comment l'intégrer dans vos applications, consultez les [Morph Docs](https://docs.morphl2.io/docs/how-morph-works/intro/).
+
+## 🚀 Déploiement
+
+Déployez facilement votre application en utilisant des plateformes comme [Vercel](https://vercel.com/),  qui offre un support natif pour les applications Next.js, ou [Juno](https://juno.build), qui vous donne un contrôle total sur le déploiement de votre dApp sur le Web3. Consultez les guides spécifiques à chaque plateforme pour plus de détails sur le déploiement des applications Next.js.
+
