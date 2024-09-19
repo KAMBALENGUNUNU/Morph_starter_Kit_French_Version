@@ -1,23 +1,23 @@
 # Forge Standard Library • [![CI status](https://github.com/foundry-rs/forge-std/actions/workflows/ci.yml/badge.svg)](https://github.com/foundry-rs/forge-std/actions/workflows/ci.yml)
 
-Forge Standard Library is a collection of helpful contracts and libraries for use with [Forge and Foundry](https://github.com/foundry-rs/foundry). It leverages Forge's cheatcodes to make writing tests easier and faster, while improving the UX of cheatcodes.
+Forge Standard Library est une collection de contrats et bibliothèques utiles pour être utilisés avec [Forge and Foundry](https://github.com/foundry-rs/foundry).Elle tire parti des cheatcodes de Forge pour rendre l'écriture des tests plus simple et plus rapide, tout en améliorant l'expérience utilisateur des cheatcodes.
 
-**Learn how to use Forge-Std with the [📖 Foundry Book (Forge-Std Guide)](https://book.getfoundry.sh/forge/forge-std.html).**
+**Apprenez à utiliser Forge-Std avec le  [📖 Livre Foundry (Guide Forge-Std))](https://book.getfoundry.sh/forge/forge-std.html).**
 
-## Install
+## Installation
 
 ```bash
 forge install foundry-rs/forge-std
 ```
 
-## Contracts
+## Contrats
 ### stdError
 
-This is a helper contract for errors and reverts. In Forge, this contract is particularly helpful for the `expectRevert` cheatcode, as it provides all compiler builtin errors.
+Ceci est un contrat utilitaire pour les erreurs et les revert. Dans Forge, ce contrat est particulièrement utile pour le cheatcode `expectRevert`, car il fournit toutes les erreurs intégrées au compilateur.
 
-See the contract itself for all error codes.
+Consultez le contrat lui-même pour obtenir tous les codes d'erreur.
 
-#### Example usage
+#### Exemple d'utilisation
 
 ```solidity
 
@@ -45,9 +45,9 @@ contract ErrorsTest {
 
 ### stdStorage
 
-This is a rather large contract due to all of the overloading to make the UX decent. Primarily, it is a wrapper around the `record` and `accesses` cheatcodes. It can *always* find and write the storage slot(s) associated with a particular variable without knowing the storage layout. The one _major_ caveat to this is while a slot can be found for packed storage variables, we can't write to that variable safely. If a user tries to write to a packed slot, the execution throws an error, unless it is uninitialized (`bytes32(0)`).
+C'est un contrat assez volumineux en raison de la surcharge nécessaire pour rendre l'expérience utilisateur agréable. Principalement, il s'agit d'un wrapper autour des cheatcodes `record` et `accesses`. Il peut *toujours* trouver et écrire dans les slot(s) de stockage associés à une variable particulière sans connaître la disposition du stockage. La seule _grosse_ mise en garde est que, bien qu'un slot puisse être trouvé pour des variables de stockage packées, nous ne pouvons pas écrire en toute sécurité dans cette variable. Si un utilisateur tente d'écrire dans un slot packé, l'exécution renvoie une erreur, sauf s'il est non initialisé (`bytes32(0)`).
 
-This works by recording all `SLOAD`s and `SSTORE`s during a function call. If there is a single slot read or written to, it immediately returns the slot. Otherwise, behind the scenes, we iterate through and check each one (assuming the user passed in a `depth` parameter). If the variable is a struct, you can pass in a `depth` parameter which is basically the field depth.
+Cela fonctionne en enregistrant tous les `SLOAD` et `SSTORE` pendant un appel de fonction. S'il y a un seul slot lu ou écrit, il renvoie immédiatement le slot. Sinon, en coulisses, nous itérons et vérifions chacun d'eux (à condition que l'utilisateur ait passé un paramètre `depth`). Si la variable est une struct, vous pouvez passer un paramètre `depth` qui correspond essentiellement à la profondeur du champ.
 
 I.e.:
 ```solidity
@@ -59,7 +59,7 @@ struct T {
 }
 ```
 
-#### Example usage
+#### Exemple d'utilisation:
 
 ```solidity
 import "forge-std/Test.sol";
@@ -74,31 +74,29 @@ contract TestContract is Test {
     }
 
     function testFindExists() public {
-        // Lets say we want to find the slot for the public
-        // variable `exists`. We just pass in the function selector
-        // to the `find` command
+        // Disons que nous voulons trouver le slot pour la variable publique `exists`. 
+        // Il suffit de passer le sélecteur de fonction à la commande `find`.
         uint256 slot = stdstore.target(address(test)).sig("exists()").find();
         assertEq(slot, 0);
     }
 
     function testWriteExists() public {
-        // Lets say we want to write to the slot for the public
-        // variable `exists`. We just pass in the function selector
-        // to the `checked_write` command
+        // Disons que nous voulons écrire dans le slot pour la variable publique `exists`.
+        // Il suffit de passer le sélecteur de fonction à la commande `checked_write`.
         stdstore.target(address(test)).sig("exists()").checked_write(100);
         assertEq(test.exists(), 100);
     }
 
-    // It supports arbitrary storage layouts, like assembly based storage locations
+    // Il prend en charge des dispositions de stockage arbitraires, comme les emplacements de stockage basés sur assembly
     function testFindHidden() public {
-        // `hidden` is a random hash of a bytes, iteration through slots would
-        // not find it. Our mechanism does
-        // Also, you can use the selector instead of a string
+        // `hidden` est un hachage aléatoire de bytes, l'itération à travers les slots ne le trouverait pas. 
+        // Notre mécanisme le trouve.
+        // Vous pouvez également utiliser le sélecteur au lieu d'une chaîne de caractères.
         uint256 slot = stdstore.target(address(test)).sig(test.hidden.selector).find();
         assertEq(slot, uint256(keccak256("my.random.var")));
     }
 
-    // If targeting a mapping, you have to pass in the keys necessary to perform the find
+    // Si vous ciblez un mapping, vous devez passer les clés nécessaires pour effectuer la recherche
     // i.e.:
     function testFindMapping() public {
         uint256 slot = stdstore
@@ -106,14 +104,14 @@ contract TestContract is Test {
             .sig(test.map_addr.selector)
             .with_key(address(this))
             .find();
-        // in the `Storage` constructor, we wrote that this address' value was 1 in the map
-        // so when we load the slot, we expect it to be 1
+        // dans le constructeur de `Storage`, nous avons écrit que la valeur de cette adresse était 1 dans la map
+        // donc lorsque nous chargeons le slot, nous nous attendons à ce qu'il soit à 1
         assertEq(uint(vm.load(address(test), bytes32(slot))), 1);
     }
 
-    // If the target is a struct, you can specify the field depth:
+    // Si la cible est une struct, vous pouvez spécifier la profondeur du champ :
     function testFindStruct() public {
-        // NOTE: see the depth parameter - 0 means 0th field, 1 means 1st field, etc.
+        // REMARQUE : voir le paramètre de profondeur - 0 signifie le 0ème champ, 1 signifie le 1er champ, etc.
         uint256 slot_for_a_field = stdstore
             .target(address(test))
             .sig(test.basicStruct.selector)
@@ -131,7 +129,7 @@ contract TestContract is Test {
     }
 }
 
-// A complex storage contract
+// Un contrat de stockage complexe
 contract Storage {
     struct UnpackedStruct {
         uint256 a;
@@ -154,21 +152,23 @@ contract Storage {
     });
 
     function hidden() public view returns (bytes32 t) {
-        // an extremely hidden storage slot
+        // un slot de stockage extrêmement caché
         bytes32 slot = keccak256("my.random.var");
         assembly {
             t := sload(slot)
         }
     }
 }
+
 ```
 
 ### stdCheats
 
-This is a wrapper over miscellaneous cheatcodes that need wrappers to be more dev friendly. Currently there are only functions related to `prank`. In general, users may expect ETH to be put into an address on `prank`, but this is not the case for safety reasons. Explicitly this `hoax` function should only be used for address that have expected balances as it will get overwritten. If an address already has ETH, you should just use `prank`. If you want to change that balance explicitly, just use `deal`. If you want to do both, `hoax` is also right for you.
+Il s'agit d'un wrapper autour de cheatcodes divers qui nécessitent des wrappers pour être plus conviviaux pour les développeurs. Actuellement, il n'y a que des fonctions liées à  `prank`.En général, les utilisateurs peuvent s'attendre à ce que de l'ETH soit ajouté à une adresse lors de l'utilisation de `prank`,  mais ce n'est pas le cas pour des raisons de sécurité. La fonction `hoax` doit uniquement être utilisée pour une adresse avec un solde attendu, car elle sera écrasée. Si une adresse possède déjà de l'ETH, il suffit d'utiliser `prank`.  Si vous souhaitez modifier explicitement ce solde, utilisez simplement `deal`. Si vous voulez faire les deux, `hoax` est également adapté.
 
 
-#### Example usage:
+#### Exemple d'utilisation:
+
 ```solidity
 
 // SPDX-License-Identifier: MIT
@@ -176,7 +176,7 @@ pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
 
-// Inherit the stdCheats
+// Hérite de stdCheats
 contract StdCheatsTest is Test {
     Bar test;
     function setUp() public {
@@ -184,22 +184,22 @@ contract StdCheatsTest is Test {
     }
 
     function testHoax() public {
-        // we call `hoax`, which gives the target address
-        // eth and then calls `prank`
+        // nous appelons `hoax`, qui donne à l'adresse cible de l'eth
+        // puis appelle `prank`
         hoax(address(1337));
         test.bar{value: 100}(address(1337));
 
-        // overloaded to allow you to specify how much eth to
-        // initialize the address with
+        // surchargé pour vous permettre de spécifier combien d'eth
+        // initialiser sur l'adresse
         hoax(address(1337), 1);
         test.bar{value: 1}(address(1337));
     }
 
     function testStartHoax() public {
-        // we call `startHoax`, which gives the target address
-        // eth and then calls `startPrank`
+        // nous appelons `startHoax`, qui donne à l'adresse cible de l'eth
+        // puis appelle `startPrank`
         //
-        // it is also overloaded so that you can specify an eth amount
+        // il est également surchargé pour que vous puissiez spécifier un montant d'eth
         startHoax(address(1337));
         test.bar{value: 100}(address(1337));
         test.bar{value: 100}(address(1337));
@@ -217,29 +217,28 @@ contract Bar {
 
 ### Std Assertions
 
-Contains various assertions.
+Contient diverses assertions.
 
 ### `console.log`
 
-Usage follows the same format as [Hardhat](https://hardhat.org/hardhat-network/reference/#console-log).
-It's recommended to use `console2.sol` as shown below, as this will show the decoded logs in Forge traces.
+L'utilisation suit le même format que [Hardhat](https://hardhat.org/hardhat-network/reference/#console-log).
+Il est recommandé d'utiliser `console2.sol` comme montré ci-dessous, car cela affichera les logs décodés dans les traces Forge.
 
 ```solidity
-// import it indirectly via Test.sol
+// l'importer indirectement via Test.sol
 import "forge-std/Test.sol";
-// or directly import it
+// ou l'importer directement
 import "forge-std/console2.sol";
 ...
 console2.log(someValue);
 ```
 
-If you need compatibility with Hardhat, you must use the standard `console.sol` instead.
-Due to a bug in `console.sol`, logs that use `uint256` or `int256` types will not be properly decoded in Forge traces.
+Si vous avez besoin de compatibilité avec Hardhat, vous devez utiliser `console.sol`  standard à la place. En raison d'un bug dans `console.sol`,  les logs qui utilisent les types `uint256` ou `int256` ne seront pas correctement décodés dans les traces Forge.
 
 ```solidity
-// import it indirectly via Test.sol
+// l'importer indirectement via Test.sol
 import "forge-std/Test.sol";
-// or directly import it
+// ou l'importer directement
 import "forge-std/console.sol";
 ...
 console.log(someValue);
@@ -247,4 +246,4 @@ console.log(someValue);
 
 ## License
 
-Forge Standard Library is offered under either [MIT](LICENSE-MIT) or [Apache 2.0](LICENSE-APACHE) license.
+Forge Standard Library est proposé sous licence [MIT](LICENSE-MIT) or [Apache 2.0](LICENSE-APACHE) license.
